@@ -1,6 +1,6 @@
 ---
 title: "Data wrangling"
-author: "My name"
+author: "Pegah Palizban"
 date: "2025-10-13"
 output: html_document
 editor: source
@@ -15,18 +15,44 @@ This tutorial will allow you to explore `dplyr` functionality based on the previ
 
 The first part does not require joins or pivots.
 
-### Import the [data from the website](https://biostat2.uni.lu/practicals/data/judgments.tsv). 
+### Import the [data from the website](https://biostat2.uni.lu/practicals/data/judgments.tsv).
+
+
 Assign to the name `judgments` and correct the column types where needed.
 
 ```{r}
 # Write your answer here
+library(tidyverse)
+judge_url <- "https://biostat2.uni.lu/practicals/data/judgments.tsv"
+judgments <- readr::read_tsv(judge_url)
+
+# spec(judgments)
+
+jud2 <- readr::read_delim(judge_url,
+             col_types = 
+               cols(start_date = col_date(format = "%d/%m/%Y"),
+                    end_date = col_date(format =  "%d/%m/%Y"),
+                    finished = "f",
+                    condition = "f",
+                    gender = "f",
+                    logbook = "c", 
+                    exclude = "f",
+                    moral_judgment = "d",
+                    moral_judgment_disgust = "d",
+                    moral_judgment_non_disgust = "d",
+                    .default = col_integer()))
+
+# jud2
 ```
 
 
 ### Use `glimpse()` to identify columns and column types.
+```{r}
+glimpse(jud2)
+```
 
 What are the dimensions of the data set.
-
+The dimension is 188 * 158
 
 ### Exercise 1 
 
@@ -37,6 +63,7 @@ Select `gender`, `subject`, `age` and referring to the `STAI` questionnaire.
 
 ```{r}
 # Write your answer here
+select(jud2, gender, subject, age, starts_with("STAI"))
 ```
 
 
@@ -44,6 +71,10 @@ Select `gender`, `subject`, `age` and referring to the `STAI` questionnaire.
 
 ```{r}
 # Write your answer here
+jud2 |> 
+  filter(STAI_pre > 65) |> 
+  filter(STAI_post > 40) |> 
+  select(subject)
 ```
 
 
@@ -51,12 +82,15 @@ Select `gender`, `subject`, `age` and referring to the `STAI` questionnaire.
 
 ```{r}
 # Write your answer here
+jud2 |> 
+  arrange(desc(STAI_pre))
 ```
 
 #### For better readability, move the subject, STAI_pre and STAI_post columns to the first positions.
 
 ```{r}
 # Write your answer here
+jud2 |> relocate("subject", "STAI_pre", "STAI_post")
 ```
 
 #### Check if the data set contains duplicated rows
