@@ -63,7 +63,7 @@ Select `gender`, `subject`, `age` and referring to the `STAI` questionnaire.
 
 ```{r}
 # Write your answer here
-select(jud2, gender, subject, age, starts_with("STAI"))
+select(jud2, "gender", "subject", "age", starts_with("STAI"))
 ```
 
 
@@ -74,7 +74,7 @@ select(jud2, gender, subject, age, starts_with("STAI"))
 jud2 |> 
   filter(STAI_pre > 65) |> 
   filter(STAI_post > 40) |> 
-  select(subject)
+  select("subject")
 ```
 
 
@@ -83,7 +83,7 @@ jud2 |>
 ```{r}
 # Write your answer here
 jud2 |> 
-  arrange(desc(STAI_pre))
+  arrange(desc("STAI_pre"))
 ```
 
 #### For better readability, move the subject, STAI_pre and STAI_post columns to the first positions.
@@ -103,6 +103,8 @@ in a de-duplicated table containing unique rows only.
 
 ```{r}
 # Your answer in code here
+jud2 |>
+  distinct(start_date, end_date)
 ```
 
 
@@ -123,6 +125,13 @@ It should contain "low", "normal" and "high" entries depending on the `STAI_pre`
 
 ```{r}
 # Write your answer here
+jud3 <- jud2 |> 
+  arrange(desc(STAI_pre)) |> 
+  mutate(STAI_pre_category = case_when(
+    STAI_pre < 25 ~ "low",
+    STAI_pre > 65 ~ "high",
+    .default = "normal"
+  )) |> relocate(STAI_pre_category)
 ```
 
 
@@ -130,6 +139,8 @@ It should contain "low", "normal" and "high" entries depending on the `STAI_pre`
 
 ```{r}
 # Write your answer here
+jud3 |> 
+  distinct(STAI_pre, STAI_pre_category)
 ```
 
 
@@ -138,6 +149,9 @@ Divide all entries in the REI questionnaire by 5, the maximal value.
 
 ```{r}
 # Write your answer here
+jud2 |> 
+  relocate(starts_with("REI")) |> 
+  mutate(across(contains("REI"), `/`, 5))
 ```
 
 
