@@ -18,18 +18,37 @@ Assign `judgments_condition_stats` to the results.
 
 ```{r}
 # Write your answer here
+judgments_condition_stats <- summarise(judgments,
+          mean = mean(moral_dilemma_dog, na.rm= TRUE),
+          med = median(moral_dilemma_dog, na.rm= TRUE),
+          std = sd(moral_dilemma_dog, na.rm= TRUE),
+          min = min(moral_dilemma_dog, na.rm = TRUE),
+          max = max(moral_dilemma_dog, na.rm = TRUE))
 ```
 
+```{r}
+judgments |> 
+  group_by(condition) |> 
+  summarise(mean = mean(moral_dilemma_dog, na.rm= TRUE),
+          med = median(moral_dilemma_dog, na.rm= TRUE),
+          std = sd(moral_dilemma_dog, na.rm= TRUE),
+          min = min(moral_dilemma_dog, na.rm = TRUE),
+          max = max(moral_dilemma_dog, na.rm = TRUE))
+```
 
 
 ### Sort by groups
 
 Find the number of subjects by `age`, `gender` and `condition`, e.g. how many 20 years of age females are in the `stress` group. 
 
-Sort the resulting tibble such that the condition that contains the most populous group is sorted first (i.e. `stress` or `control` appear together). 
+"There are fourteen 20 years of age females in the `stress` group."
+
+Sort the resulting tibble such that the condition that contains the most populous group is sorted first (i.e. `stress` or `control` appear together).
+
 
 ```{r}
 # Write your answer here
+count(judgments, gender, condition, age,  sort = TRUE)
 ```
 
 Ensure that the resulting tibble does not contain groups.
