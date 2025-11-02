@@ -153,5 +153,24 @@ jud2 |>
   relocate(starts_with("REI")) |> 
   mutate(across(contains("REI"), `/`, 5))
 ```
+# Exercise 3
+
+```{r}
+library(tidyverse)
+judge_url <- "https://biostat2.uni.lu/practicals/data/judgments.tsv"
+judgments <- readr::read_tsv(judge_url)
+
+select(judgments, "subject")
+```
+
+# Checking if the rows are different based on the columns
+```{r}
+nrow(distinct(trees, Girth, Height, Volume)) == nrow(trees)
+```
+
+# Adding name to the first column of the tibble
+```{r}
+as_tibble(swiss, rownames = "Provinces")
+```
 
 
